@@ -1,0 +1,17 @@
+{
+"name":"Chromercado Livre",
+"description":"Extensão para Google Chrome que melhora a pesquisa de produtos no Mercado Livre.",
+"version":"1",
+"manifest_version":2,
+"background":
+{
+	"scripts": ["jquery-3.2.0.min.js"]
+},
+"content_scripts": [
+    {
+      "matches": ["http://*.mercadolivre.com.br/*"],
+      "js": ["jquery-3.2.0.min.js", "main.js"],
+	  "run_at": "document_end"
+    }
+  ]
+}
