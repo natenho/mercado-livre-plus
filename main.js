@@ -20,12 +20,14 @@ function formatNumber(number)
 
 $(".results-item").each(function() {
 	
-	var link = $(this).find("h2.list-view-item-title>a").first();
-	var findResult = $(this).find(".price-wrap .ch-price");
+	var link = $(this).find("a").first();
+	var shippingDiv = $(this).find(".stack_column_item.shipping").first();
+	var mainTitleDiv = $(this).find(".main-title").first();
+	var findResult = $(this).find(".item__price");
 	
 	if (findResult.length == 0)
 	{
-		findResult = $(this).find(".price-info-cost .ch-price");
+		findResult = $(this).find(".price-fraction");
 	}
 	
 	var price = findResult.first();
@@ -40,7 +42,7 @@ $(".results-item").each(function() {
 											
 			var total = price.text().replace(/R\$/g, '');
 			total = total.replace('.', '');
-			total = '(' + total + ') / 100';
+			total = '(' + total + ' / 100.0)';
 			total = eval(total).toFixed(2);
 			total = total.replace('.', '<sup>');
 			total = total + '</sup>';
@@ -49,7 +51,12 @@ $(".results-item").each(function() {
 			price.append(' = ' + total);
 			
 			var shippingEstimated = $(response).find(".shipping-estimated").html();
-			price.parent().append('<br/>' + shippingEstimated);
+			shippingEstimated = shippingEstimated.replace('Chegará entre os dias ', '(');
+			shippingEstimated = shippingEstimated.replace('\.', ')');
+			//price.parent().append('<br/>' + shippingEstimated);
+			shippingDiv.first().find('p').append(shippingEstimated);
+			if(shippingDiv == null)
+				mainTitleDiv.parent().append(shippingEstimated);
 		}
 		
 	 });
