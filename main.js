@@ -10,7 +10,6 @@ function formatNumber(number)
 	decimalPart = integerAndDecimalArray.length > 1 ? decimalSeparator + integerAndDecimalArray[1] : '';
 	
 	var thousandGroupRegex = /(\d+)(\d{3})/;
-<<<<<<< HEAD
 	
 	while (thousandGroupRegex.test(integerPart)) {
 		integerPart = integerPart.replace(thousandGroupRegex, '$1' + thousandSeparator + '$2');
@@ -29,24 +28,6 @@ $(".results-item").each(function() {
 	if (findResult.length == 0)
 	{
 		findResult = $(this).find(".price-fraction");
-=======
-	
-	while (thousandGroupRegex.test(integerPart)) {
-		integerPart = integerPart.replace(thousandGroupRegex, '$1' + thousandSeparator + '$2');
-	}
-	
-	return integerPart + decimalPart;
-}
-
-$(".results-item").each(function() {
-	
-	var link = $(this).find("h2.list-view-item-title>a").first();
-	var findResult = $(this).find(".price-wrap .ch-price");
-	
-	if (findResult.length == 0)
-	{
-		findResult = $(this).find(".price-info-cost .ch-price");
->>>>>>> e1169b3097d442027602d6766b44c3d3fa515cdd
 	}
 	
 	var price = findResult.first();
@@ -61,11 +42,7 @@ $(".results-item").each(function() {
 											
 			var total = price.text().replace(/R\$/g, '');
 			total = total.replace('.', '');
-<<<<<<< HEAD
 			total = '(' + total + ' / 100.0)';
-=======
-			total = '(' + total + ') / 100';
->>>>>>> e1169b3097d442027602d6766b44c3d3fa515cdd
 			total = eval(total).toFixed(2);
 			total = total.replace('.', '<sup>');
 			total = total + '</sup>';
@@ -74,16 +51,12 @@ $(".results-item").each(function() {
 			price.append(' = ' + total);
 			
 			var shippingEstimated = $(response).find(".shipping-estimated").html();
-<<<<<<< HEAD
 			shippingEstimated = shippingEstimated.replace('Chegará entre os dias ', '(');
 			shippingEstimated = shippingEstimated.replace('\.', ')');
 			//price.parent().append('<br/>' + shippingEstimated);
 			shippingDiv.first().find('p').append(shippingEstimated);
 			if(shippingDiv == null)
 				mainTitleDiv.parent().append(shippingEstimated);
-=======
-			price.parent().append('<br/>' + shippingEstimated);
->>>>>>> e1169b3097d442027602d6766b44c3d3fa515cdd
 		}
 		
 	 });
