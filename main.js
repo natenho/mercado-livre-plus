@@ -1,65 +1,64 @@
-function formatNumber(number)
-{
-	decimalSeparator = ',';
-	thousandSeparator = '.';
-		
-	number += '';
-	integerAndDecimalArray = number.split('.');
-	
-	integerPart = integerAndDecimalArray[0];
-	decimalPart = integerAndDecimalArray.length > 1 ? decimalSeparator + integerAndDecimalArray[1] : '';
-	
-	var thousandGroupRegex = /(\d+)(\d{3})/;
-	
-	while (thousandGroupRegex.test(integerPart)) {
-		integerPart = integerPart.replace(thousandGroupRegex, '$1' + thousandSeparator + '$2');
-	}
-	
-	return integerPart + decimalPart;
+function extractValueFromPriceText(priceText) {
+    var parts = priceText.trim().split(' ');
+
+    if (parts.length == 2) {
+        return eval(parts[1]);
+    }
+
+    return eval(parts[1] + '.' + parts[2]);
 }
 
-$(".results-item").each(function() {
-	
-	var link = $(this).find("a").first();
-	var shippingDiv = $(this).find(".stack_column_item.shipping").first();
-	var mainTitleDiv = $(this).find(".main-title").first();
-	var findResult = $(this).find(".item__price");
-	
-	if (findResult.length == 0)
-	{
-		findResult = $(this).find(".price-fraction");
-	}
-	
-	var price = findResult.first();
-		 
-	 $.get(link.attr('href'), function(response) {
-		
-		var shipping = $(response).find(".shipping-method-title .ch-price").html();
-										
-		if (typeof shipping  != 'undefined')
-		{
-			price.append(' + ' + shipping);
-											
-			var total = price.text().replace(/R\$/g, '');
-			total = total.replace('.', '');
-			total = '(' + total + ' / 100.0)';
-			total = eval(total).toFixed(2);
-			total = total.replace('.', '<sup>');
-			total = total + '</sup>';
-			total = formatNumber(total);
-			
-			price.append(' = ' + total);
-			
-			var shippingEstimated = $(response).find(".shipping-estimated").html();
-			shippingEstimated = shippingEstimated.replace('Chegará entre os dias ', '(');
-			shippingEstimated = shippingEstimated.replace('\.', ')');
-			//price.parent().append('<br/>' + shippingEstimated);
-			shippingDiv.first().find('p').append(shippingEstimated);
-			if(shippingDiv == null)
-				mainTitleDiv.parent().append(shippingEstimated);
-		}
-		
-	 });
+function extractValueFromShippingPrice(htmlElement) {
+    var html = htmlElement.html().replace(/<sup>/g, '<sup>.');
+    var priceText = $($.parseHTML(html)).text();
+
+    return extractValueFromPriceText(priceText);
+}
+
+$(".results-item").each(function () {
+
+    var link = $(this).find("a").first();
+
+    var mainTitleDiv = $(this).find(".main-title").first();
+    var findResult = $(this).find(".item__price");
+
+    if (findResult.length == 0) {
+        findResult = $(this).find(".price-fraction");
+    }
+
+    var price = findResult.first();
+
+    chrome.runtime.sendMessage(
+        { contentScriptQuery: "fetchShipping", url: link.attr('href') },
+        response => {
+
+            var shippingPriceElement = $(response).find(".shipping-method-title .ch-price");
+            var shippingDetailElement = $(response).find(".shipping-method-title").parent().parent();
+
+            if (typeof shippingPriceElement.html() != 'undefined') {
+
+                var p1 = extractValueFromPriceText(price.text());
+                var s1 = extractValueFromShippingPrice(shippingPriceElement);
+
+                var total = (p1 + s1).toFixed(2);
+                total = '<span class="price__fraction">' + total;
+                total = total.replace('.', '</span><span class="price__decimals" style="left:0">');
+                total = total + '</span>';
+
+                shipping = shippingPriceElement.html().replace('<sup>', '<span class="price__decimals" style="left:0">');
+                shipping = shipping.replace('</sup>', '</span>');
+
+                price.append(' + ' + shipping + ' = ' + total);
+            }
+
+            var shippingEstimated = shippingDetailElement.find(".subtitle").html();
+
+            if (typeof shippingEstimated != 'undefined') {
+                shippingEstimated = shippingEstimated.replace('Chegará entre os dias ', 'Chegará entre ');
+                shippingEstimated = shippingEstimated.replace('\.', '');
+
+                mainTitleDiv.parent().append('<span style="font-size: 14px; font-weight:bold; color: #00a650;">' + shippingEstimated + '</span>');
+            }
+        }
+    );
 });
-
-
