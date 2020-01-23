@@ -26,31 +26,31 @@ $(".results-item").each(function () {
         findResult = $(this).find(".price-fraction");
     }
 
-    var price = findResult.first();
+    var productPriceElement = findResult.first();
 
     chrome.runtime.sendMessage(
         { contentScriptQuery: "fetchShipping", url: link.attr('href') },
         response => {
 
             var shippingPriceElement = $(response).find(".shipping-method-title .ch-price");
-            var shippingDetailElement = $(response).find(".shipping-method-title").parent().parent();
 
             if (typeof shippingPriceElement.html() != 'undefined') {
+                var productPrice = extractValueFromPriceText(productPriceElement.text());
+                var shippingPrice = extractValueFromShippingPrice(shippingPriceElement);
 
-                var p1 = extractValueFromPriceText(price.text());
-                var s1 = extractValueFromShippingPrice(shippingPriceElement);
+                var totalPrice = (productPrice + shippingPrice).toFixed(2);
 
-                var total = (p1 + s1).toFixed(2);
-                total = '<span class="price__fraction">' + total;
-                total = total.replace('.', '</span><span class="price__decimals" style="left:0">');
-                total = total + '</span>';
+                var totalPriceHtml = '<span class="price__fraction">' + totalPrice;
+                totalPriceHtml = totalPriceHtml.replace('.', '</span><span class="price__decimals" style="left:0">');
+                totalPriceHtml = totalPriceHtml + '</span>';
 
-                shipping = shippingPriceElement.html().replace('<sup>', '<span class="price__decimals" style="left:0">');
-                shipping = shipping.replace('</sup>', '</span>');
+                var shippingPriceHtml = shippingPriceElement.html().replace('<sup>', '<span class="price__decimals" style="left:0">');
+                shippingPriceHtml = shippingPriceHtml.replace('</sup>', '</span>');
 
-                price.append(' + ' + shipping + ' = ' + total);
+                productPriceElement.append(' + ' + shippingPriceHtml + ' = ' + totalPriceHtml);
             }
 
+            var shippingDetailElement = $(response).find(".shipping-method-title").parent().parent();
             var shippingEstimated = shippingDetailElement.find(".subtitle").html();
 
             if (typeof shippingEstimated != 'undefined') {
