@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "ChroMercadoLivre",
-  "description": "Extensão para Google Chrome que melhora a pesquisa de produtos no Mercado Livre.",
-  "version": "1.0",
+  "name": "Mercado Livre Plus",
+  "description": "Extensão para Google Chrome que melhora a listagem de produtos no Mercado Livre.",
+  "version": "0.0.0.1",
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
