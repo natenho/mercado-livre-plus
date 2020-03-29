@@ -2,7 +2,7 @@
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
         if (request.contentScriptQuery == "fetchShipping") {
-            var url = request.url;
+            var url = request.url;            
             fetch(url)
                 .then(async response => {
                     const html = await response.text();
