@@ -20,7 +20,7 @@ $(".ui-search-layout__item").each(function () {
     var findResult = $(this).find(".item__price");
 
     if (findResult.length == 0) {
-        findResult = $(this).find(".price-tag");
+        findResult = $(this).find("span.price-tag");
     }
 
     var productPriceElement = findResult.first();
@@ -29,7 +29,8 @@ $(".ui-search-layout__item").each(function () {
         { contentScriptQuery: "fetchShipping", url: link.attr('href') },
         response => {
 
-            var shippingPriceElement = $(response).find(".shipping-method-title .ch-price").first();
+            var title = $(response).find(".ui-pdp-title").first();
+            var shippingPriceElement = $(response).find(".ui-pdp-container__row--shipping-summary span.price-tag").first();
 
             if (typeof shippingPriceElement.html() != 'undefined') {
                 var productPrice = extractValueFromPriceText(productPriceElement.text());
@@ -43,27 +44,23 @@ $(".ui-search-layout__item").each(function () {
 
                 var shippingPriceHtml = shippingPriceElement.html().replace('<sup>', '<span class="price-tag-cents" style="left:0">');
                 shippingPriceHtml = shippingPriceHtml.replace('</sup>', '</span>');
-                shippingPriceHtml = shippingPriceHtml.replace(' ', '&nbsp;');
 
                 productPriceElement.append('+' + shippingPriceHtml + '= ' + totalPriceHtml);
             }
-
-            var shippingDetailElement = $(response).find(".shipping-method-title").parent().parent();
-            var shippingEstimated = shippingDetailElement.find(".subtitle").html();
+                        
+            var shippingDetailElement = $(response).find(".ui-pdp-container__row--shipping-summary .ui-pdp-media__title");
+            var shippingEstimated = shippingDetailElement.text();
 
             if (typeof shippingEstimated != 'undefined') {
                 shippingEstimated = shippingEstimated.replace('Chegará entre os dias ', 'Chegará entre ');
                 shippingEstimated = shippingEstimated.replace('\.', '');
+                shippingEstimated = shippingEstimated.replace(/ por.*/g, '');
 
                 mainTitleDiv.parent().append('<span style="font-size: 14px; font-weight:bold; color: #00a650;">' + shippingEstimated + '</span>');
             }
             else
             {
-                var shippingEstimated = shippingDetailElement.find("span.green").html();
-
-                if (typeof shippingEstimated != 'undefined') {    
-                    mainTitleDiv.parent().append('<span style="font-size: 14px; font-weight:bold; color: #00a650;">' + shippingEstimated + '</span>');
-                }
+                console.log('Erro analisando shippingEstimated em ' + location.href);                
             }
         }
     );
