@@ -4,7 +4,7 @@
   "description": "Extensão para Google Chrome que melhora a listagem de produtos no Mercado Livre.",
   "version": "0.0.0.5",
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon96.png",
     "default_popup": "popup.html"
   },
   "background": {
@@ -28,5 +28,10 @@
   ],
   "permissions": [
     "*://*.mercadolivre.com.br/*"
-  ]
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "96": "icon96.png"
+  }
 }
