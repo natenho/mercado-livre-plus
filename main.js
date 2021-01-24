@@ -2,6 +2,7 @@ function extractValueFromPriceText(priceText) {
     return eval(
         priceText
         .replace('R$', '')
+        .replace('.', '')
         .replace(',', '.'));
 }
 
