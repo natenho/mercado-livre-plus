@@ -1,5 +1,5 @@
 function extractValueFromPriceText(priceText) {
-    return eval(
+    return parseFloat(
         priceText
         .replace('R$', '')
         .replace('.', '')
@@ -39,8 +39,8 @@ $(".ui-search-layout__item").each(function () {
 
                 var totalPrice = (productPrice + shippingPrice).toFixed(2);
 
-                var totalPriceHtml = '<span class="price__fraction">' + totalPrice;
-                totalPriceHtml = totalPriceHtml.replace('.', '</span><span class="price-tag-cents" style="left:0">');
+                var totalPriceHtml = '<span class="price__fraction">' + Number(totalPrice).toLocaleString("pt-br", {minimumFractionDigits: 2});
+                totalPriceHtml = totalPriceHtml.replace(',', '</span><span class="price-tag-cents" style="left:0">');
                 totalPriceHtml = totalPriceHtml + '</span>';
 
                 var shippingPriceHtml = shippingPriceElement.html().replace('<sup>', '<span class="price-tag-cents" style="left:0">');
