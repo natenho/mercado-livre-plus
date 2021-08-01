@@ -28,14 +28,12 @@ $(".ui-search-layout__item").each(function () {
 
     chrome.runtime.sendMessage(
         { contentScriptQuery: "fetchShipping", url: link.attr('href') },
-        response => {
-
-            var title = $(response).find(".ui-pdp-title").first();
+        response => {            
             var shippingPriceElement = $(response).find(".ui-pdp-container__row--shipping-summary span.price-tag").first();
 
             if (typeof shippingPriceElement.html() != 'undefined') {
-                var productPrice = extractValueFromPriceText(productPriceElement.text());
-                var shippingPrice = extractValueFromShippingPrice(shippingPriceElement);
+                var productPrice = extractValueFromPriceText(productPriceElement.find(".price-tag-amount").text());
+                var shippingPrice = extractValueFromPriceText(shippingPriceElement.find(".price-tag-amount").text());
 
                 var totalPrice = (productPrice + shippingPrice).toFixed(2);
 
