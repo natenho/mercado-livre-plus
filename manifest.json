@@ -1,24 +1,19 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Mercado Livre Plus",
   "description": "Extensão para Google Chrome que melhora a listagem de produtos no Mercado Livre.",
   "version": "0.0.0.7",
-  "browser_action": {
+  "action": {
     "default_icon": "icon96.png",
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": [
-      "background.js",
-      "jquery-3.2.0.min.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
-  "content_security_policy": "script-src 'self' https://http2.mlstatic.com; object-src 'self'",
   "content_scripts": [
     {
       "matches": [
-        "*://*.mercadolivre.com.br/*"        
+        "*://*.mercadolivre.com.br/*"
       ],
       "js": [
         "jquery-3.2.0.min.js",
@@ -27,8 +22,8 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": [
-    "*://*.mercadolivre.com.br/*"    
+  "host_permissions": [
+    "*://*.mercadolivre.com.br/*"
   ],
   "icons": {
     "16": "icon16.png",
