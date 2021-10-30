@@ -39,12 +39,12 @@ $(".ui-search-layout__item").each(function () {
 
                 var totalPriceHtml = '<span class="price__fraction">' + Number(totalPrice).toLocaleString("pt-br", {minimumFractionDigits: 2});
                 totalPriceHtml = totalPriceHtml.replace(',', '</span><span class="price-tag-cents" style="left:0">');
-                totalPriceHtml = totalPriceHtml + '</span>';
+                totalPriceHtml = totalPriceHtml + '</span></span>';
 
                 var shippingPriceHtml = shippingPriceElement.html().replace('<sup>', '<span class="price-tag-cents" style="left:0">');
                 shippingPriceHtml = shippingPriceHtml.replace('</sup>', '</span>');
 
-                productPriceElement.append('+' + shippingPriceHtml + '= ' + totalPriceHtml);
+                productPriceElement.append('&plus;<span style="color:#3483fa !important;">' + shippingPriceHtml + '</span>&equals;<span style="color:#3483fa !important; font-weight: bolder !important;">' + totalPriceHtml + "</span>");
             }
                         
             var shippingDetailElement = $(response).find(".ui-pdp-container__row--shipping-summary .ui-pdp-media__title");

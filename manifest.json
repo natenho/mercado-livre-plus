@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Mercado Livre Plus",
   "description": "Extensão para Google Chrome que melhora a listagem de produtos no Mercado Livre.",
-  "version": "0.0.0.7",
+  "version": "0.0.0.8",
   "action": {
     "default_icon": "icon96.png",
     "default_popup": "popup.html"
